@@ -1,8 +1,6 @@
 
-# Created by https://www.gitignore.io/api/apachecordova
-
-### ApacheCordova ###
-# Apache Cordova generated files and directories
+### Moment ###
+# Project for learning multiplatform technology.
 bin/*
 !/plugins
 !/plugins/android.json
@@ -11,4 +9,18 @@ moment-jpp/plugins/*
 moment-jpp/platforms/*
 moment-jpp/node_modules/*
 
-# End of https://www.gitignore.io/api/apachecordova
+# WIP
+
+# dependencies
+moment-ddf/node_modules
+
+# testing
+moment-ddf/coverage
+
+# production
+moment-ddf/build
+
+# misc
+.DS_Store
+moment-ddf/.env
+
