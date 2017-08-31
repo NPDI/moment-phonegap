@@ -4,8 +4,8 @@ import {
 	Framework7App, Statusbar
 } from 'framework7-react';
 
-import AppLoginScreen from './Login'
-import {routes} from '../routes';
+import AppLoginScreen from '../pages/Login'
+import {routes} from '../../routes';
 
 export const App = () => (	
 	<Framework7App themeType="material" routes={routes}>		
