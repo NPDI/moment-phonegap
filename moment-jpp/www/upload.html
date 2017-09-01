@@ -1,0 +1,34 @@
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back"></i>
+                <span>Back</span>
+            </a>
+        </div>
+        <div class="center sliding">Upload new photo</div>
+        <div class="right">
+            <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div data-page="upload" class="page">
+        <div class="page-content">
+            <div class="content-block">
+                <img id="my-image" src="img/paisagem.jpg" style="width: 100%;height: 100%;">
+                <label for="img-file" class="button">Select your image</label>
+                <input id="img-file" type="file" style="display: none;" accept="image/*" onchange="photoChanged(this.files)">
+                <br>
+                <div class="row">
+                    <div class="col-50">
+                        <a href="#" class="button button-big color-red">Cancel</a>
+                    </div>
+                    <div class="col-50">
+                        <a href="#" class="button button-big color-green" onclick="uploadImage()">Submit</a>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>

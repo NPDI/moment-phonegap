@@ -5,6 +5,9 @@ var myApp = new Framework7();
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 
+var urlApi = "http://192.168.20.41:3001/";
+var imgName = "";
+
 // Add view
 var mainView = myApp.addView('.view-main', {
     // Because we want to use dynamic navbar, we need to enable it for this view:
@@ -16,76 +19,139 @@ $$(document).on('deviceready', function () {
     //execute code when device is ready
 });
 
-
-// Now we need to run the code that will be executed only for About page.
-
-// Option 1. Using page callback for page (for "about" page in this case) (recommended way):
-myApp.onPageInit('about', function (page) {
-    // Do something here for "about" page
-
-})
-
 myApp.onPageInit('map', function (page) {
     // Do something here for "map" page
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
 })
 
-// Option 2. Using one 'pageInit' event handler for all pages:
-$$(document).on('pageInit', function (e) {
-    // Get page data from event data
-    var page = e.detail.page;
-
-    if (page.name === 'about') {
-        // Following code will be executed for page with data-page attribute equal to "about"
-        myApp.alert('Here comes About page');
-    }
+myApp.onPageInit('upload', function (page) {
+    //on init page upload        
 })
 
-// Option 2. Using live 'pageInit' event handlers for each page
-$$(document).on('pageInit', '.page[data-page="about"]', function (e) {
-    // Following code will be executed for page with data-page attribute equal to "about"
-    myApp.alert('Here comes About page');
+myApp.onPageInit('upload-description', function (page) {
+    myApp.alert('Now, enter a description for your image if necessary...', 'Success =)');
 })
 
 $$('.list-panel').on('click', function (e) {
     myApp.closePanel();
 });
 
-function login(){
-    var formData = myApp.formToJSON('#login');    
+function login() {
     mainView.router.loadPage('map.html');
+    var formData = myApp.formToJSON('#login');
+    $.post(urlApi + 'token', formData, function (data) {
+        if (data.token) {
+            window.localStorage.setItem("userId", data.user.id);
+            window.localStorage.setItem("token", data.token);
+            $.ajaxSetup({
+                headers: { "Authorization": data.token }
+            });
+            mainView.router.loadPage('map.html');
+        } else {
+            myApp.alert('Email or password are incorrect =(', 'Ohh...');
+        }
+    }).fail(function (err) {
+        myApp.alert('Some error occurred =(', 'Ohh...');
+    });
 }
 
-function saveUser(){    
-    var formData = myApp.formToJSON('#my-form');   
-    myApp.alert(JSON.stringify(formData), 'Dados inseridos');     
+function saveUser() {
+    var formData = myApp.formToJSON('#my-form');
+    $.post(urlApi + 'api/users/create', formData, function (data) {
+        myApp.alert('Registered with success', 'Ok');
+        mainView.router.loadPage('index.html');
+    }).fail(function (err) {
+        myApp.alert('Some error occurred =(', 'Ohh...');
+    });
 };
 
-
 function onSuccess(position) {
+    $.get(urlApi + 'api/images/all', function (data) {        
+        var images = data.payload;        
+        var infoWindowContent = [];
+        var markers = [];
+        images.forEach(function (image) {
+            infoWindowContent.push(['<div class="info_content">' +
+                '<h3>User ' + image.UserId + '</h3>' +
+                '<p>Description - ' + image.description + '</p>' +
+                '<img src="' + urlApi + image.name + '" style="widht:150px;height:150px;">' +
+                '</div>']
+            );            
+           markers.push(['Hello',parseFloat(image.latitude), parseFloat(image.longitude)]);
+        });        
+        createMap(position, infoWindowContent, markers);
+    }).fail(function(error){
+
+    });
+
+};
+
+function createMap(position, infoWindowContent, markers){
+    /*var infoWindowContent = [
+        ['<div class="info_content">' +
+        '<h3>Brooklyn Museum</h3>' +
+        '<p>The Brooklyn Museum is an art museum located in the New York City borough of Brooklyn.</p>' + '</div>'],
+        ['<div class="info_content">' +
+        '<h3>Brooklyn Public Library</h3>' +
+        '<p>The Brooklyn Public Library (BPL) is the public library system of the borough of Brooklyn, in New York City.</p>' +
+        '</div>'],
+        ['<div class="info_content">' +
+        '<h3>Prospect Park Zoo</h3>' +
+        '<p>The Prospect Park Zoo is a 12-acre (4.9 ha) zoo located off Flatbush Avenue on the eastern side of Prospect Park, Brooklyn, New York City.</p>' +
+        '</div>']
+    ];*/
+
+    
+
     var longitude = position.coords.longitude;
     var latitude = position.coords.latitude;
     var latLong = new google.maps.LatLng(latitude, longitude);
+    var bounds = new google.maps.LatLngBounds();
 
-    var locations = [
-        ['Mercado Municipal', -22.253749, -45.704170, 'https://68.media.tumblr.com/avatar_ba21ec6b0cb5_128.png'],
-        ['ETE FMC', -22.255957, -45.702666, 'https://68.media.tumblr.com/avatar_149303a9b9dc_128.png'],
-        ['Inatel', -22.257121, -45.696493, 'http://static.ziggi.uol.com.br/imagens_programas/icone_7407451d6b7090af7d12afef46843e4f_paisagem_de_natureza.jpg']
-    ];
+    /*var markers = [
+        ['Brooklyn Museum, NY', 40.671531, -73.963588],
+        ['Brooklyn Public Library, NY', 40.672587, -73.968146],
+        ['Prospect Park Zoo, NY', 40.665588, -73.965336]
+    ];*/
+    alert(JSON.stringify(markers));
+    alert(JSON.stringify(infoWindowContent));
 
     var mapOptions = {
-        center: latLong,
-        zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    map.setTilt(50);
+    
+    // Add multiple markers to map
+    var infoWindow = new google.maps.InfoWindow(), marker, i;
 
-    setMarkers(map, locations);
-    infowindow = new google.maps.InfoWindow({
-        content: "loading..."
+    for (i = 0; i < markers.length; i++) {
+        var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+        bounds.extend(position);
+        marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: markers[i][0]           
+        });
+
+        // Add info window to marker    
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+                infoWindow.setContent(infoWindowContent[i][0]);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
+
+        // Center the map to fit all markers on the screen
+        map.fitBounds(bounds);
+    }
+    // Set zoom level
+    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
+        this.setZoom(13);
+        google.maps.event.removeListener(boundsListener);
     });
-};
+}
 
 function onError(error) {
     alert('erro');
@@ -93,26 +159,56 @@ function onError(error) {
         'message: ' + error.message + '\n');
 };
 
+function uploadImage() {
+    var opa = $("#img-file")[0].files[0];
+    var formd = new FormData();
+    formd.append("myfile", opa);
 
-function setMarkers(map, markers) {
+    $.ajax({
+        method: 'POST',
+        url: urlApi + "upload",
+        data: formd,
+        processData: false,
+        contentType: false
+    }).done(function (result) {
+        imgName = result.payload.filename;
+        mainView.router.loadPage('upload-description.html');
+    }).fail(function (err) {
+        myApp.alert(JSON.stringify(err));
+    });
+}
 
-    for (var i = 0; i < markers.length; i++) {
-        var sites = markers[i];
-        var siteLatLng = new google.maps.LatLng(sites[1], sites[2]);
-        var marker = new google.maps.Marker({
-            position: siteLatLng,
-            map: map,
-            title: sites[0]
-            //zIndex: sites[3]
-            //html: sites[4]
-        });
+function photoChanged(files) {
+    if (files.length > 0 && files[0].name.match(/\.(png|jpeg|jpg)$/)) {
+        var file = files[0];
+        var fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = function (e) {
+            $('#my-image').attr('src', e.target.result);
+        };
+    } else {
+        //TODO: error type file
+    }
+}
 
-        var contentString = '<img src="' + sites[3] + '">';
-
-        google.maps.event.addListener(marker, "click", function () {
-            //alert(this.html);
-            infowindow.setContent(contentString);
-            infowindow.open(map, this);
+function saveImage() {
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    function onSuccess(position) {
+        var formImage = myApp.formToJSON('#form-description');
+        formImage.UserId = window.localStorage.getItem("userId");
+        formImage.name = imgName;
+        formImage.latitude = position.coords.latitude;
+        formImage.longitude = position.coords.longitude;
+        $.post(urlApi + 'api/images/create', formImage, function (data) {
+            mainView.router.loadPage('map.html');
+        }).fail(function (err) {
+            myApp.alert('Some error occurred =(', 'Ohh...');
         });
     }
-};
+
+    function onError(error) {
+        myApp.alert(error.message, 'Error =(');
+        console.log('code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n');
+    }
+}
