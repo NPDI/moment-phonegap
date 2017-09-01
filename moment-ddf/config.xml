@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.diegodulval.moment" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Moment</name>
+    <description>
+	    Project for learning multiplatform technology
+	</description>
+    <author email="diegodulval@fai-mg.br" href="http://www.fai-mg.br">
+	    Diego Dulval de Freitas
+	</author>
+
+	<preference name="Orientation" value="portrait" />
+	<preference name="BackgroundColor" value="0xF2F2F2FF" />
+	<preference name="DisallowOverscroll" value="true" />
+
+
+	<!-- Código gerado pelo Ionic Resources -->
+	<preference name="SplashScreen" value="screen" />
+	<preference name="SplashScreenDelay" value="3000" />
+
+	<!-- Plataforma Android -->
+	<engine name="android" />
+
+	<!-- Plugins -->
+	<plugin name="phonegap-plugin-barcodescanner" spec="*" />
+	<plugin name="cordova-plugin-statusbar" spec="*" />
+	<plugin name="cordova-plugin-whitelist" spec="*" />
+
+	<!-- Status bar -->
+	<platform name="android">
+		<preference name="StatusBarBackgroundColor" value="#E86C13" />
+	</platform>
+
+	<platform name="ios">
+		<preference name="StatusBarOverlaysWebView" value="false" />
+		<preference name="StatusBarBackgroundColor" value="#F57F17" />
+	</platform>
+
+	<!-- Libera acesso -->
+	<access origin="*" />
+
+</widget>
