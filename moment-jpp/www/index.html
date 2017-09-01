@@ -46,10 +46,9 @@
         <div class="content-block">
             <h2>Moment App</h2>
             <ul>
-                <li><a class="list-panel" href="index.html">Home</a></li>
-                <li><a class="list-panel" href="profile.html">Profile</a></li>
-                <li><a class="list-panel" href="map.html">Map</a></li>
-                <li><a class="list-panel" href="register.html">Register</a></li>
+                <li><a class="list-panel" href="map.html">Home</a></li>
+                <li><a class="list-panel" href="profile.html">Profile</a></li>                
+                <li><a class="list-panel" href="upload.html">Upload photo</a></li>                
             </ul>                                        
         </div>
     </div>
@@ -63,13 +62,13 @@
                 <div class="navbar-inner">
                     <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
                     <div class="center sliding">Awesome App</div>
-                    <div class="right">
+                    <!-- <div class="right">
                         <!--
                           Right link contains only icon - additional "icon-only" class
                           Additional "open-panel" class tells app to open panel when we click on this link
-                        -->
+                        
                         <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
@@ -100,6 +99,7 @@
                             </form>
                             <div class="content-block">
                                 <a href="#" class="button" onclick="login()">Sign in</a>
+                                <a href="register.html" class="button" style="margin-top: 5px;">Sign up</a>
                             </div>                         
                         </div>
                     </div>
@@ -119,6 +119,7 @@
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/my-app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpfLPjIT-jj3cHawE8_ZwTUuAZIOWs7xQ" async defer></script>
 </body>
