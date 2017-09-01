@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "cordova-android": "^6.2.3",
+        "cordova-plugin-camera": "git+https://github.com/apache/cordova-plugin-camera.git",
         "cordova-plugin-compat": "^1.0.0",
         "cordova-plugin-splashscreen": "^4.0.3",
         "cordova-plugin-statusbar": "^2.2.3",

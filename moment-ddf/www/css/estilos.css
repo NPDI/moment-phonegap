@@ -25,3 +25,10 @@ body {
 .section {
     padding-top: 125px;
 }
+
+#map-canvas {
+    width: 100%; 
+    height: 400px;
+    margin: 0;
+    padding: 15px;
+}
