@@ -10,17 +10,23 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "phonegap-plugin-barcodescanner": {},
-            "cordova-plugin-splashscreen": {}
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-compat": {},
+            "cordova-plugin-camera": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-geolocation": {}
         }
     },
     "dependencies": {
         "cordova-android": "^6.2.3",
-        "cordova-plugin-camera": "git+https://github.com/apache/cordova-plugin-camera.git",
+        "cordova-plugin-camera": "^2.4.1",
         "cordova-plugin-compat": "^1.0.0",
+        "cordova-plugin-file": "^4.0.0",
+        "cordova-plugin-file-transfer": "^1.6.3",
+        "cordova-plugin-geolocation": "^2.4.3",
         "cordova-plugin-splashscreen": "^4.0.3",
         "cordova-plugin-statusbar": "^2.2.3",
         "cordova-plugin-whitelist": "^1.3.2",
-        "phonegap-plugin-barcodescanner": "^6.0.8",
-        "python": "0.0.4"
+        "phonegap-plugin-barcodescanner": "^6.0.8"
     }
 }
