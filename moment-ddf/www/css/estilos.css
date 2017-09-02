@@ -32,3 +32,8 @@ body {
     margin: 0;
     padding: 15px;
 }
+
+#map-image{
+    height: 100%;
+    width: 100%;
+}
