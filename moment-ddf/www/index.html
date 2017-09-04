@@ -67,14 +67,14 @@
     </div>
 
     <div id="new-target" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h5> Adicionar nova imagem </h5>
-            <form class="col s12">
+        <form class="col s12" onsubmit="imageController.add(event)">
+            <div class="modal-content">
+                <h5> Adicionar nova imagem </h5>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input style="display: none" id="image" type="file">
+                        <input style="display: none" id="inputImage" type="file">
                         <img class="responsive-img" id="image" alt="map-image" src="https://github.com/NPDI/moment-phonegap/blob/7f14c54b54455920665651fb9dc9d943a2699124/moment-ddf/resources/logo.png?raw=true">
-                        <label for="image">Imagem</label>
+                        <label for="inputImage">Imagem</label>
                     </div>
                 </div>
                 <div class="row">
@@ -95,16 +95,17 @@
                         <label for="longitude">Longitude</label>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn deep-orange waves-effect waves-light modal-close acao-finalizar">
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn deep-orange waves-effect waves-light modal-close acao-finalizar">
                         Inserir
                     </button>
-            <button class="btn-flat waves-effect waves-red modal-close">
+                <button type="btn" class="btn-flat waves-effect waves-red modal-close">
                         Cancelar
                     </button>
-        </div>
+            </div>
+        </form>
     </div>
 
     <script src="js/jquery.min.js"></script>
@@ -116,7 +117,7 @@
     <script src="js/controllers/ImageController.js"></script>
 
     <script>
-        let imageController = new ImagemController();
+        let imageController = new ImageController();
     </script>
 
 </body>
