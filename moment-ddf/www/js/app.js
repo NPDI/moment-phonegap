@@ -19,9 +19,35 @@ $('#acao-finalizar').on('click', function () {
 })
 
 
+var onSuccess = function(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+          return position;
+};
+
+function onError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+    return false;
+}
+
 function myMap() {
+    let position = navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    
+    if(!position){
+        position = new google.maps.LatLng('-22.255275', '-45.702841')
+    }else{
+        position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    };
+
     var mapOptions = {
-        center: new google.maps.LatLng(51.5, -0.12),
+        center: position,
         zoom: 10,
         mapTypeId: google.maps.MapTypeId.HYBRID
     }
