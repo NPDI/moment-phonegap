@@ -51,10 +51,7 @@
     </div>
 
     <div id="imagens" class="section">
-        <button onclick="capturePhotoWithData();">Capture Photo With Image Data</button> <br>
-        <button onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> <br>
-        <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
-        <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+        <button onclick="capturePhotoWithFile();">Tirar Foto :)</button> <br>
         <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
         <img style="display:none;" id="largeImage" src="" />
     </div>
@@ -71,10 +68,10 @@
             <div class="modal-content">
                 <h5> Adicionar nova imagem </h5>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s12" onclick="capturePhotoWithFile();">
+                        <label for="inputImage">Imagem</label>
                         <input style="display: none" id="inputImage" type="file">
                         <img class="responsive-img" id="image" alt="map-image" src="https://github.com/NPDI/moment-phonegap/blob/7f14c54b54455920665651fb9dc9d943a2699124/moment-ddf/resources/logo.png?raw=true">
-                        <label for="inputImage">Imagem</label>
                     </div>
                 </div>
                 <div class="row">

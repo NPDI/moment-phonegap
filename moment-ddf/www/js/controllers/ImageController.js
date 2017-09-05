@@ -3,7 +3,6 @@ class ImageController {
   constructor() {
 
     let $ = document.querySelector.bind(document)
-    this.name = '';
     this._inputImage = null;
     this._inputDescription = $('#description');
     this._inputLatitude = $('#latitude');
@@ -12,14 +11,20 @@ class ImageController {
 
   add(event) {
     event.preventDefault();
-    let image;
+    const name;
     this._inputImage = document.querySelector('#inputImage').files[0];
-    const promisse = this.uploadImage(this._inputImage);
+    this.uploadImage(this._inputImage)
+      .then((value) => name = value);
 
-    promisse
-      .then(function (value) {
-        this.name = value;
-      });
+    const image = new Image(
+      null,
+      name,
+      this._inputDescription.value,
+      this._inputLatitude.value,
+      this._inputLongitude.vale
+    )
+
+    window.alert(JSON.stringify(image));
 
   }
 
@@ -36,7 +41,7 @@ class ImageController {
       processData: false,
       contentType: false
     }).done((result) => name = result.payload.filename)
-      .fail((err) => console.log('Deu Erro na requisiçao'));
+      .fail((err) => window.alert('Deu Erro na requisiçao'));
 
     return name;
   }
