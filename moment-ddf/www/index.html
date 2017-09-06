@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="icons/material.css">
     <link rel="stylesheet" href="css/materialize.min.css">
     <link rel="stylesheet" href="css/estilos.css">
+
+    <script src="js/models/Image.js"></script>
+    <script src="js/controllers/ImageController.js"></script>
+    <script>
+        let imageController = new ImageController();
+    </script>
+
 </head>
 
 <body>
@@ -52,6 +59,7 @@
 
     <div id="imagens" class="section">
         <button onclick="capturePhotoWithFile();">Tirar Foto :)</button> <br>
+        <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Pegar Foto Biblioteca</button><br>
         <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
         <img style="display:none;" id="largeImage" src="" />
     </div>
@@ -59,8 +67,8 @@
 
     <div class="fixed-action-btn">
         <a class="btn-floating btn-large waves-effect waves-light blue modal-trigger" href="#new-target" id="open-camera">
-                    <i class="material-icons">camera</i>
-                </a>
+            <i class="material-icons">camera</i>
+        </a>
     </div>
 
     <div id="new-target" class="modal modal-fixed-footer">
@@ -68,8 +76,8 @@
             <div class="modal-content">
                 <h5> Adicionar nova imagem </h5>
                 <div class="row">
-                    <div class="input-field col s12" onclick="capturePhotoWithFile();">
-                        <label for="inputImage">Imagem</label>
+                    <div class="input-field col s12" onclick="openPhoto('library');">
+                        <label>Imagem</label>
                         <input style="display: none" id="inputImage" type="file">
                         <img class="responsive-img" id="image" alt="map-image" src="https://github.com/NPDI/moment-phonegap/blob/7f14c54b54455920665651fb9dc9d943a2699124/moment-ddf/resources/logo.png?raw=true">
                     </div>
@@ -95,7 +103,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn deep-orange waves-effect waves-light modal-close acao-finalizar">
+                <button type="submit" class="btn deep-orange waves-effect waves-light modal-close">
                         Inserir
                     </button>
                 <button type="btn" class="btn-flat waves-effect waves-red modal-close">
@@ -110,12 +118,8 @@
     <script src="cordova.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=myMap&key=AIzaSyDpfLPjIT-jj3cHawE8_ZwTUuAZIOWs7xQ" async defer></script>
     <script src="js/app.js"></script>
-    <script src="js/models/Image.js"></script>
-    <script src="js/controllers/ImageController.js"></script>
 
-    <script>
-        let imageController = new ImageController();
-    </script>
+
 
 </body>
 
