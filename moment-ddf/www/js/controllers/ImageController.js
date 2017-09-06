@@ -11,17 +11,18 @@ class ImageController {
 
   add(event) {
     event.preventDefault();
-    const name;
+    let name;
     this._inputImage = document.querySelector('#inputImage').files[0];
     this.uploadImage(this._inputImage)
-      .then((value) => name = value);
+      .then(value => name = value)
+      .catch(err => console.log(err));
 
     const image = new Image(
       null,
       name,
       this._inputDescription.value,
       this._inputLatitude.value,
-      this._inputLongitude.vale
+      this._inputLongitude.value,
     )
 
     window.alert(JSON.stringify(image));
@@ -30,7 +31,7 @@ class ImageController {
 
   async uploadImage(file) {
     var form = new FormData();
-    form.append("myfile", file);
+    form.append("myfile", file, "mommentImage.jpg");
 
     let name;
 
