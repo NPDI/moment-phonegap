@@ -11,17 +11,12 @@ class ImageController {
   }
 
   getAll() {
-    fetch("http://192.168.20.41:3001/api/images/all", {
+
+    return fetch("http://192.168.20.41:3001/api/images/all", {
       method: "GET"
     })
-      .then(resp => console.log(
-        resp.json()
-          .then(data => {
-            data.payload.map(img => 
-              console.log(new Image(img.id, img.name, img.latitude, img.longitude, img.UserId))
-            )}
-          )))
-      .catch(err => console.log(err));
+      .then(resp => resp.json())
+      .catch(err => console.log('Erro GetAll' + err));
   }
 
   async add(event) {
@@ -45,7 +40,7 @@ class ImageController {
       body: JSON.stringify(image)
     })
       .then(resp => console.log(resp))
-      .catch(err => console.log(err));
+      .catch(err => console.log('Erro addImage - ' + err));
   }
 
   uploadImage(file) {
@@ -57,6 +52,6 @@ class ImageController {
       body: form
     })
       .then(resp => resp.json())
-      .catch(err => console.log(err));
+      .catch(err => console.log('Erro uploadImage - ' + err));
   }
 }
