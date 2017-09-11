@@ -1,3 +1,5 @@
+const URL_API = 'http://192.168.20.41:3001/'
+const imageController = new ImageController();
 
 $('.modal-trigger').leanModal();
 
@@ -19,7 +21,7 @@ function onError(error) {
     return false;
 }
 
-function myMap() {
+async function myMap() {
     let position = navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
     if (!position) {
@@ -30,10 +32,52 @@ function myMap() {
 
     const mapOptions = {
         center: position,
-        zoom: 10,
+        zoom: 15,
         mapTypeId: google.maps.MapTypeId.HYBRID
     }
     const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+    const reponseImages = await imageController.getAll()
+    const images = reponseImages.payload;
+    let markers = [];
+    let contentString = [];
+
+    images.forEach(img => {
+        contentString.push(['<div class="info_content">' +
+            '<h3>User ' + img.UserId + '</h3>' +
+            '<p>Description - ' + img.description + '</p>' +
+            '<img src="' + URL_API + img.name + '" style="widht:150px;height:150px;">' +
+            '</div>']
+        );
+        markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
+    });
+
+
+    markers.forEach(mark => {
+        const position = new google.maps.LatLng(mark[1], mark[2]);
+        console.log('POSITION' + position);
+
+        contentString.forEach(content => {
+            const infowindow = new google.maps.InfoWindow({
+                content: content.toString()
+            });
+
+            const marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: mark[0]
+            });
+
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+            });
+        });
+
+    })
+
+
+
+
 }
 
 let pictureSource;
