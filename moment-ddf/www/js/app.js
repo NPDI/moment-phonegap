@@ -77,11 +77,26 @@ function openPhoto(source) {
             break;
         case "library":
             const inputFile = document.querySelector('#inputImage');
+            const image = document.querySelector('#image');
             inputFile.click();
             break;
         default:
             break;
     };
+}
+
+function onFileSelected(event) {
+    const selectedFile = event.target.files[0];
+    const reader = new FileReader();
+
+    const imgtag = document.getElementById("image");
+    imgtag.title = selectedFile.name;
+
+    reader.onload = function (event) {
+        imgtag.src = event.target.result;
+    };
+
+    reader.readAsDataURL(selectedFile);
 }
 
 function getPhoto(source) {
@@ -94,5 +109,5 @@ function getPhoto(source) {
 }
 
 function onFail(message) {
-    alert("Error : " + message)
+    openPhoto('library');
 }

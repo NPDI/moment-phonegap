@@ -16,9 +16,6 @@
 
     <script src="js/models/Image.js"></script>
     <script src="js/controllers/ImageController.js"></script>
-    <script>
-        let imageController = new ImageController();
-    </script>
 
 </head>
 
@@ -76,7 +73,7 @@
             <div class="modal-content">
                 <h5> Adicionar nova imagem </h5>
                 <div class="row">
-                    <div class="input-field col s12" onclick="openPhoto('library');">
+                    <div class="input-field col s12" onchange="onFileSelected(event)" onclick="openPhoto('camera');">
                         <label>Imagem</label>
                         <input style="display: none" id="inputImage" type="file">
                         <img class="responsive-img" id="image" alt="map-image" src="https://github.com/NPDI/moment-phonegap/blob/7f14c54b54455920665651fb9dc9d943a2699124/moment-ddf/resources/logo.png?raw=true">
@@ -119,6 +116,9 @@
     <script src="https://maps.googleapis.com/maps/api/js?callback=myMap&key=AIzaSyDpfLPjIT-jj3cHawE8_ZwTUuAZIOWs7xQ" async defer></script>
     <script src="js/app.js"></script>
 
+    <script>
+        let imageController = new ImageController();
+    </script>
 
 
 </body>
