@@ -10,6 +10,20 @@ class ImageController {
     this.userId = 1;
   }
 
+  getAll() {
+    fetch("http://192.168.20.41:3001/api/images/all", {
+      method: "GET"
+    })
+      .then(resp => console.log(
+        resp.json()
+          .then(data => {
+            data.payload.map(img => 
+              console.log(new Image(img.id, img.name, img.latitude, img.longitude, img.UserId))
+            )}
+          )))
+      .catch(err => console.log(err));
+  }
+
   async add(event) {
     event.preventDefault();
     this.inputImage = document.querySelector('#inputImage').files[0];
@@ -26,7 +40,7 @@ class ImageController {
     )
 
     fetch("http://192.168.20.41:3001/api/images/create", {
-      headers: {'Content-type': 'application/json'},
+      headers: { 'Content-type': 'application/json' },
       method: "POST",
       body: JSON.stringify(image)
     })
