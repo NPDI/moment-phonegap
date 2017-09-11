@@ -1,26 +1,11 @@
 class Image {
-  constructor(id, name, description, latitude, longitude) {
-    this._id = id;
-    this._name = name;
+  constructor(id, name, description, latitude, longitude, userId) {
+    this.id = id;
+    this.name = name;
     this.description = description;
-    this._latitude = latitude;
-    this._longitude = longitude;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.UserId = userId;
     Object.freeze(this);
-  }
-
-  get id() {
-    return this._id;
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  get latitude() {
-    return this._latitude;
-  }
-
-  get longitude() {
-    return this._longitude;
   }
 }

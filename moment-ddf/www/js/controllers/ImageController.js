@@ -7,6 +7,7 @@ class ImageController {
     this.inputDescription = $('#description');
     this.inputLatitude = $('#latitude');
     this.inputLongitude = $('#longitude');
+    this.userId = 1;
   }
 
   async add(event) {
@@ -21,10 +22,16 @@ class ImageController {
       this.inputDescription.value,
       this.inputLatitude.value,
       this.inputLongitude.value,
+      this.userId
     )
 
-    console.log(JSON.stringify(image));
-
+    fetch("http://192.168.20.41:3001/api/images/create", {
+      headers: {'Content-type': 'application/json'},
+      method: "POST",
+      body: JSON.stringify(image)
+    })
+      .then(resp => console.log(resp))
+      .catch(err => console.log(err));
   }
 
   uploadImage(file) {
@@ -35,7 +42,7 @@ class ImageController {
       method: "POST",
       body: form
     })
-    .then(resp => resp.json())
-    .catch(err => console.log(err));
+      .then(resp => resp.json())
+      .catch(err => console.log(err));
   }
 }
