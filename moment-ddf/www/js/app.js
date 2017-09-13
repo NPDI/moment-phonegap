@@ -1,6 +1,3 @@
-const URL_API = 'http://192.168.20.41:3001/'
-const imageController = new ImageController();
-
 $('.modal-trigger').leanModal();
 
 var onSuccess = function (position) {
@@ -16,12 +13,11 @@ var onSuccess = function (position) {
 };
 
 function onError(error) {
-    console.log('code: ' + error.code + '\n' +
-        'message: ' + error.message + '\n');
+    console.log('Not found geolocation');
     return false;
 }
 
-async function myMap() {
+function myMap() {
     let position = navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
     if (!position) {
@@ -37,12 +33,11 @@ async function myMap() {
     }
     const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-    const reponseImages = await imageController.getAll()
-    const images = reponseImages.payload;
     let markers = [];
     let contentString = [];
 
-    images.forEach(img => {
+    imageController.listImage.images.forEach(img => {
+        console.log(img);
         contentString.push(
             [`<div class="info_content"> +
             <h3>User ${img.UserId} </h3> +
