@@ -3,28 +3,27 @@ class ImagesView {
         this._element = element;
     }
 
-    _template() {
+    _template(list) {
         return `   
         <div class="row">
-            <div class="col s12 m12">
-            <div class="card">
-                <div class="card-image">
-                <img src="http://materializecss.com/images/sample-1.jpg">
-                <span class="card-title">Card Title</span>
-                </div>
-                <div class="card-content">
-                <p>I am a very simple card. I am good at containing small bits of information.
-                I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                <a href="#">This is a link</a>
-                </div>
-            </div>
-            </div>
+        ${list.images.map(img => {
+                console.log('VIEW:' + img)
+                return `<div class="col s12 m12">
+                            <div class="card">
+                                <div class="card-image">
+                                <img src="http://192.168.20.41:3001/${img.name}">
+                                <span class="card-title">${img.UserId}</span>
+                                </div>
+                                <div class="card-content">
+                                <p>${img.description}</p>
+                                </div>
+                            </div>
+                        </div>`
+            }).join('')}
         </div>`;
     }
 
-    update() {
-        this._element.innerHTML = this._template();
+    update(list) {
+        this._element.innerHTML = this._template(list);
     }
 }
