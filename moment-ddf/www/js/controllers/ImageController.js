@@ -8,6 +8,7 @@ class ImageController {
     this.inputLatitude = $('#latitude');
     this.inputLongitude = $('#longitude');
     this.userId = 1;
+    this._listImage = new ListImage();
   }
 
   getAll() {
@@ -39,7 +40,7 @@ class ImageController {
       method: "POST",
       body: JSON.stringify(image)
     })
-      .then(resp => console.log(resp))
+      .then(resp => this._cleanForm())
       .catch(err => console.log('Erro addImage - ' + err));
   }
 
@@ -53,5 +54,18 @@ class ImageController {
     })
       .then(resp => resp.json())
       .catch(err => console.log('Erro uploadImage - ' + err));
+  }
+
+  _createImage() {
+    return new Image();
+  }
+
+  _cleanForm() {
+
+    this.inputImage = null;
+    this.inputDescription = '';
+    this.inputLatitude = '';
+    this.inputLongitude = '';
+    this.inputDescription.focus();
   }
 }
