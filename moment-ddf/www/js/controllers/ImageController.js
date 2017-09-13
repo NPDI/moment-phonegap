@@ -8,11 +8,14 @@ class ImageController {
     this.inputLatitude = $('#latitude');
     this.inputLongitude = $('#longitude');
     this.userId = 1;
+    this._imagesView = new ImagesView( $('#imagesView') );
+
+    this._imagesView.update();
+
     this._listImage = new ListImage();
   }
 
   getAll() {
-
     return fetch("http://192.168.20.41:3001/api/images/all", {
       method: "GET"
     })
@@ -24,7 +27,7 @@ class ImageController {
     event.preventDefault();
     this.inputImage = document.querySelector('#inputImage').files[0];
 
-    let file = await this.uploadImage(this.inputImage);
+    let file = await this._uploadImage(this.inputImage);
 
     const image = new Image(
       null,
@@ -44,7 +47,7 @@ class ImageController {
       .catch(err => console.log('Erro addImage - ' + err));
   }
 
-  uploadImage(file) {
+  _uploadImage(file) {
     const form = new FormData();
     form.append("myfile", file, "mommentImage.jpg");
 
@@ -61,7 +64,6 @@ class ImageController {
   }
 
   _cleanForm() {
-
     this.inputImage = null;
     this.inputDescription = '';
     this.inputLatitude = '';

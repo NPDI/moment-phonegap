@@ -1,5 +1,9 @@
 class ImagesView {
-    template() {
+    constructor(element) {
+        this._element = element;
+    }
+
+    _template() {
         return `   
         <div class="row">
             <div class="col s12 m12">
@@ -18,5 +22,9 @@ class ImagesView {
             </div>
             </div>
         </div>`;
+    }
+
+    update() {
+        this._element.innerHTML = this._template();
     }
 }

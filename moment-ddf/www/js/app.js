@@ -43,11 +43,12 @@ async function myMap() {
     let contentString = [];
 
     images.forEach(img => {
-        contentString.push(['<div class="info_content">' +
-            '<h3>User ' + img.UserId + '</h3>' +
-            '<p>Description - ' + img.description + '</p>' +
-            '<img src="' + URL_API + img.name + '" style="widht:150px;height:150px;">' +
-            '</div>']
+        contentString.push(
+            [`<div class="info_content"> +
+            <h3>User ${img.UserId} </h3> +
+            <p>Description - ${img.description} </p> +
+            <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;"> +
+            </div>`]
         );
         markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
     });
