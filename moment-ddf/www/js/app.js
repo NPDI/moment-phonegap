@@ -55,7 +55,6 @@ async function myMap() {
 
     markers.forEach(mark => {
         const position = new google.maps.LatLng(mark[1], mark[2]);
-        console.log('POSITION' + position);
 
         contentString.forEach(content => {
             const infowindow = new google.maps.InfoWindow({
@@ -74,10 +73,6 @@ async function myMap() {
         });
 
     })
-
-
-
-
 }
 
 let pictureSource;
