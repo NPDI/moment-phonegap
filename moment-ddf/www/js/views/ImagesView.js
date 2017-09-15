@@ -1,13 +1,12 @@
-class ImagesView {
-    constructor(element) {
-        this._element = element;
+class ImagesView extends View {
+    constructor(props) {
+        super(props)
     }
 
-    _template(list) {
+    template(list) {
         return `   
         <div class="row">
         ${list.images.map(img => {
-                console.log('VIEW:' + img)
                 return `<div class="col s12 m12">
                             <div class="card">
                                 <div class="card-image">
@@ -23,7 +22,4 @@ class ImagesView {
         </div>`;
     }
 
-    update(list) {
-        this._element.innerHTML = this._template(list);
-    }
 }
