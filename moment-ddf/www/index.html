@@ -13,16 +13,10 @@
     <link rel="stylesheet" href="icons/material.css">
     <link rel="stylesheet" href="css/materialize.min.css">
     <link rel="stylesheet" href="css/estilos.css">
-
-    <script src="js/models/Image.js"></script>
-    <script src="js/models/ListImage.js"></script>
-    <script src="js/views/ImagesView.js"></script>
-    <script src="js/controllers/ImageController.js"></script>
-
 </head>
 
 <body>
-
+    
     <div class="topo-fixo z-depth-1">
         <div class="valign-wrapper yellow darken-4 white-text">
             <h5 class="titulo">Moment</h5>
@@ -42,12 +36,12 @@
             <li class="tab">
                 <a href="#mapa" class="white-text waves-effect waves-light">
                             Mapa
-                        </a>
+                </a>
             </li>
             <li class="tab">
                 <a href="#imagens" class="white-text waves-effect waves-light">
                             Imagens
-                        </a>
+                </a>
             </li>
         </ul>
     </div>
@@ -60,6 +54,7 @@
         <div id="imagesView"> </div>
     </div>
 
+    <div id='messagesView'> </div>
 
     <div class="fixed-action-btn">
         <a class="btn-floating btn-large waves-effect waves-light blue modal-trigger" href="#new-target" id="open-camera">
@@ -109,15 +104,24 @@
         </form>
     </div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/materialize.min.js"></script>
+    <script src="js/models/Image.js"></script>
+    <script src="js/models/ListImage.js"></script>
+    <script src="js/models/Message.js"></script>
+
+    <script src="js/views/View.js"></script>    
+    <script src="js/views/ImagesView.js"></script>
+    <script src="js/views/MessagesView.js"></script>
+
+    <script src="js/controllers/ImageController.js"></script>
+
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/materialize.min.js"></script>
     <script src="cordova.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=myMap&key=AIzaSyDpfLPjIT-jj3cHawE8_ZwTUuAZIOWs7xQ" async defer></script>
     <script src="js/app.js"></script>
 
     <script>
-        const URL_API = 'http://192.168.20.41:3001'
-        const imageController = new ImageController();
+        let imageController = new ImageController();
     </script>
 </body>
 
