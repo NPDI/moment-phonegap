@@ -1,74 +1,80 @@
+const URL_API = 'http://192.168.20.41:3001'
+
 $('.modal-trigger').leanModal();
 
-var onSuccess = function (position) {
-    alert('Latitude: ' + position.coords.latitude + '\n' +
-        'Longitude: ' + position.coords.longitude + '\n' +
-        'Altitude: ' + position.coords.altitude + '\n' +
-        'Accuracy: ' + position.coords.accuracy + '\n' +
-        'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-        'Heading: ' + position.coords.heading + '\n' +
-        'Speed: ' + position.coords.speed + '\n' +
-        'Timestamp: ' + position.timestamp + '\n');
-    return position;
-};
-
-function onError(error) {
-    console.log('Not found geolocation');
-    return false;
-}
-
 function myMap() {
-    let position = navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
-    if (!position) {
-        position = new google.maps.LatLng('-22.255275', '-45.702841')
-    } else {
-        position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    function onSuccess(position = false) {
+        /*  alert('Latitude: ' + position.coords.latitude + '\n' +
+             'Longitude: ' + position.coords.longitude + '\n' +
+             'Altitude: ' + position.coords.altitude + '\n' +
+             'Accuracy: ' + position.coords.accuracy + '\n' +
+             'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
+             'Heading: ' + position.coords.heading + '\n' +
+             'Speed: ' + position.coords.speed + '\n' +
+             'Timestamp: ' + position.timestamp + '\n'); */
+
+
+        createMap(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+
     };
 
-    const mapOptions = {
-        center: position,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.HYBRID
+    function onError(error) {
+        console.log('Not found geolocation');
+        createMap(new google.maps.LatLng('-22.255275', '-45.702841'));
     }
-    const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-    let markers = [];
-    let contentString = [];
-
-    imageController.listImage.images.forEach(img => {
-        console.log(img);
-        contentString.push(
-            [`<div class="info_content"> +
-            <h3>User ${img.UserId} </h3> +
-            <p>Description - ${img.description} </p> +
-            <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;"> +
-            </div>`]
-        );
-        markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
-    });
 
 
-    markers.forEach(mark => {
-        const position = new google.maps.LatLng(mark[1], mark[2]);
+    function createMap(position) {
+        const mapOptions = {
+            center: position,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+        }
+        const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-        contentString.forEach(content => {
-            const infowindow = new google.maps.InfoWindow({
-                content: content.toString()
-            });
+        let markers = [];
+        let contentString = [];
 
-            const marker = new google.maps.Marker({
-                position: position,
-                map: map,
-                title: mark[0]
-            });
+        const images = imageController.getAll();
 
-            marker.addListener('click', function () {
-                infowindow.open(map, marker);
-            });
+        console.log(images);
+
+        images.forEach(img => {
+            console.log(img);
+            contentString.push(
+                [`<div class="info_content"> +
+                 <h3>User ${img.UserId} </h3> +
+                 <p>Description - ${img.description} </p> +
+                 <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;"> +
+                 </div>`]
+            );
+            markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
         });
 
-    })
+
+        markers.forEach(mark => {
+            const position = new google.maps.LatLng(mark[1], mark[2]);
+
+            contentString.forEach(content => {
+                const infowindow = new google.maps.InfoWindow({
+                    content: content.toString()
+                });
+
+                const marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    title: mark[0]
+                });
+
+                marker.addListener('click', function () {
+                    infowindow.open(map, marker);
+                });
+            });
+
+        })
+    }
 }
 
 let pictureSource;
@@ -93,14 +99,10 @@ function dataURItoBlob(dataURI) {
 function onPhotoSuccess(imageURI) {
 
     const imageTag = document.getElementById('image');
-    imageTag.style.display = 'block';
     imageTag.src = "data:image/jpeg;base64," + imageURI;
 
     const inputImage = document.querySelector('#inputImage');
     inputImage.files[0] = dataURItoBlob(imageURI)
-    console.log(inputImage.files[0]);
-
-    alert(JSON.stringify(inputImage.files[0]));
 }
 
 function openPhoto(source) {
@@ -120,6 +122,18 @@ function openPhoto(source) {
     };
 }
 
+function getPhoto(source) {
+    navigator.camera.getPicture(onPhotoSuccess, onFail, {
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL
+    });
+}
+
+function onFail(message) {
+    openPhoto('library');
+}
+
+
 function onFileSelected(event) {
     const selectedFile = event.target.files[0];
     const reader = new FileReader();
@@ -132,17 +146,4 @@ function onFileSelected(event) {
     };
 
     reader.readAsDataURL(selectedFile);
-}
-
-function getPhoto(source) {
-
-    navigator.camera.getPicture(onPhotoSuccess, onFail, {
-        quality: 50,
-        destinationType: destinationType.FILE_URI,
-        sourceType: source
-    });
-}
-
-function onFail(message) {
-    openPhoto('library');
 }

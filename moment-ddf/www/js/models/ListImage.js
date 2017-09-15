@@ -8,7 +8,12 @@ class ListImage {
         this._images.push(image);
     }
 
+    clear(){
+        this._images = [];
+    }
+
     get images() {
         return [].concat(this._images);
     }
+
 }

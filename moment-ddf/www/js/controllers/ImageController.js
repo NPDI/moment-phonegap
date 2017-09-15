@@ -8,17 +8,19 @@ class ImageController {
     this.inputLatitude = $('#latitude');
     this.inputLongitude = $('#longitude');
     this.userId = 1;
-    this.listImage = this.getAll();
+    this.listImage = new ListImage();
 
     this._imagesView = new ImagesView($('#imagesView'));
     this._imagesView.update(this.listImage);
 
-    console.log(this.listImage)
+    this._message = new Message();
+    this._messagesView = new MessagesView($('#messagesView'));
+    this._messagesView.update(this._message);
 
   }
 
   getAll() {
-    const images = new ListImage();
+    const images = []
 
     const promise = fetch("http://192.168.20.41:3001/api/images/all", {
       method: "GET"
@@ -27,7 +29,7 @@ class ImageController {
       .catch(err => console.log('Erro GetAll' + err));
 
     promise.then(data => {
-      data.payload.forEach(img => images.add(img));
+      data.payload.forEach(img => images.push(img));
     })
 
     return images;
@@ -46,11 +48,13 @@ class ImageController {
 
     promise.then(data => {
       this.listImage.add(data.payload);
+
       this._imagesView.update(this.listImage);
       this._cleanForm();
-    });
 
-    console.log('Nova lista: ' + JSON.stringify(this.listImage))
+      this._message.text = 'Imagem adicionada com sucesso!';
+      this._messagesView.update(this._message);
+    });
   }
 
   _uploadImage(file) {
@@ -66,9 +70,9 @@ class ImageController {
   }
 
   async _createImage() {
+
     this.inputImage = document.querySelector('#inputImage').files[0];
     let file = await this._uploadImage(this.inputImage);
-
     return new Image(
       null,
       file.payload.filename,
