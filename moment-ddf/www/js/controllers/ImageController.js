@@ -5,6 +5,7 @@ class ImageController {
     let $ = document.querySelector.bind(document)
 
     this.inputImage = null;
+    this.tagImg = $('#image');
     this.inputDescription = $('#description');
     this.inputLatitude = $('#latitude');
     this.inputLongitude = $('#longitude');
@@ -25,58 +26,50 @@ class ImageController {
   }
 
   getAll() {
-    const images = []
 
-    const promise = fetch("http://192.168.20.41:3001/api/images/all", {
-      method: "GET"
-    })
-      .then(resp => resp.json())
-      .catch(err => console.log('Erro GetAll' + err));
+    let service = new ImageService();
 
-    promise.then(data => {
-      data.payload.forEach(img => images.push(img));
-    })
-
-    return images;
+    service.getAll()
+      .then(data => {
+        data.payload.forEach(img => this.listImage.add(img))
+        this._message.text = 'Imagens carregadas com sucesso!';
+      })
+      .catch(err => this._message.text = 'Ocorre um erro ao carregar as imagens!');
   }
 
-  async add(event) {
+  add(event) {
     event.preventDefault();
 
-    const promise = fetch("http://192.168.20.41:3001/api/images/create", {
-      headers: { 'Content-type': 'application/json' },
-      method: "POST",
-      body: JSON.stringify(await this._createImage())
-    })
-      .then(resp => resp.json())
-      .catch(err => console.log('Erro addImage - ' + err));
-
-    promise.then(data => {
-      this.listImage.add(data.payload);
-      this._message.text = 'Imagem adicionada com sucesso!';
-      this.clearForm();
-    });
-  }
-
-  _uploadImage(file) {
-    const form = new FormData();
-    form.append("myfile", file, "mommentImage.jpg");
-
-    return fetch("http://192.168.20.41:3001/upload", {
-      method: "POST",
-      body: form
-    })
-      .then(resp => resp.json())
-      .catch(err => console.log('Erro uploadImage - ' + err));
-  }
-
-  async _createImage() {
-
     this.inputImage = document.querySelector('#inputImage').files[0];
-    let file = await this._uploadImage(this.inputImage);
+
+    let service = new ImageService();
+
+    service.upload(this.inputImage)
+      .then(file => {
+        let image = this._createImage(file.payload.filename);
+        service.create(image)
+          .then(data => {
+            this.listImage.add(data.payload);
+            this._message.text = 'Imagem adicionada com sucesso!';
+            this.clearForm();
+          })
+          .catch(err => this._message.text = 'Ocorre um erro ao adicionar a imagem!')
+      })
+      .catch(err => this._message.text = 'Ocorre um erro ao fazer o upload da imagem!');
+
+    /* Promise.all([
+     service.upload(this.inputImage),
+     service.create()
+   ])
+     .then(data => console.log(data))
+     .catch(err => this._message.text = 'Ocorre um erro ao fazer o upload da imagem!');
+ */
+  }
+
+  _createImage(name) {
     return new Image(
       null,
-      file.payload.filename,
+      name,
       this.inputDescription.value,
       this.inputLatitude.value,
       this.inputLongitude.value,
@@ -85,6 +78,8 @@ class ImageController {
   }
 
   clearForm() {
+    this.inputImage = null;
+    this.tagImg.src = 'https://github.com/NPDI/moment-phonegap/blob/7f14c54b54455920665651fb9dc9d943a2699124/moment-ddf/resources/logo.png?raw=true';
     this.inputDescription.value = '';
     this.inputLatitude.value = '';
     this.inputLongitude.value = '';
