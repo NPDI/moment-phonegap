@@ -97,7 +97,7 @@
                 <button type="submit" class="btn deep-orange waves-effect waves-light modal-close">
                         Inserir
                     </button>
-                <button type="button" class="btn-flat waves-effect waves-red modal-close">
+                <button onclick="imageController.clearForm()" type="button" class="btn-flat waves-effect waves-red modal-close">
                         Cancelar
                     </button>
             </div>
@@ -112,6 +112,9 @@
     <script src="js/views/ImagesView.js"></script>
     <script src="js/views/MessagesView.js"></script>
 
+    <script src="js/services/ProxyFactory.js"></script>
+    <script src="js/helpers/Bind.js"></script>
+    
     <script src="js/controllers/ImageController.js"></script>
 
     <script src="js/vendor/jquery.min.js"></script>

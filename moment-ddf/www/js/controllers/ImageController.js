@@ -3,31 +3,24 @@ class ImageController {
   constructor() {
 
     let $ = document.querySelector.bind(document)
+
     this.inputImage = null;
     this.inputDescription = $('#description');
     this.inputLatitude = $('#latitude');
     this.inputLongitude = $('#longitude');
     this.userId = 1;
-    let self = this;
-    this.listImage = new Proxy(new ListImage(), {
-      get(target, prop, receiver) {
-        if ((['add', 'clear'].includes(prop) && typeof (target[prop]) == typeof (Function))){
-          return function () {
-            console.log(`interceptando ${prop}`);
-            Reflect.apply(target[prop], target, arguments);
-            self._imagesView.update(target);
-          }
-        }
-        return Reflect.get(target, prop, receiver);
-      }
-    })
 
-    this._imagesView = new ImagesView($('#imagesView'));
-    this._imagesView.update(this.listImage);
+    this.listImage = new Bind(
+      new ListImage(),
+      new ImagesView($('#imagesView')),
+      'add', 'clear'
+    )
 
-    this._message = new Message();
-    this._messagesView = new MessagesView($('#messagesView'));
-    this._messagesView.update(this._message);
+    this._message = new Bind(
+      new Message(),
+      new MessagesView($('#messagesView')),
+      'text'
+    );
 
   }
 
@@ -60,11 +53,8 @@ class ImageController {
 
     promise.then(data => {
       this.listImage.add(data.payload);
-
-      this._cleanForm();
-
       this._message.text = 'Imagem adicionada com sucesso!';
-      this._messagesView.update(this._message);
+      this.clearForm();
     });
   }
 
@@ -94,10 +84,9 @@ class ImageController {
     )
   }
 
-  _cleanForm() {
-    this.inputImage = null;
-    this.inputDescription = '';
-    this.inputLatitude = '';
-    this.inputLongitude = '';
+  clearForm() {
+    this.inputDescription.value = '';
+    this.inputLatitude.value = '';
+    this.inputLongitude.value = '';
   }
 }
