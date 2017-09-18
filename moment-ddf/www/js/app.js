@@ -27,6 +27,9 @@ function myMap() {
 
 
     function createMap(position) {
+
+        let service = new ImageService();
+
         const mapOptions = {
             center: position,
             zoom: 15,
@@ -37,22 +40,20 @@ function myMap() {
         let markers = [];
         let contentString = [];
 
-        const images = imageController.getAll();
-
-        console.log(images);
-
-        images.forEach(img => {
-            console.log(img);
-            contentString.push(
-                [`<div class="info_content"> +
-                 <h3>User ${img.UserId} </h3> +
-                 <p>Description - ${img.description} </p> +
-                 <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;"> +
-                 </div>`]
-            );
-            markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
-        });
-
+        service.getAll()
+            .then(data => {
+                console.log(data);
+                data.payload.forEach(img => {
+                    contentString.push(
+                        [`<div class="info_content"> +
+                     <h3>User ${img.UserId} </h3> +
+                     <p>Description - ${img.description} </p> +
+                     <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;"> +
+                     </div>`]
+                    );
+                    markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
+                });
+            })
 
         markers.forEach(mark => {
             const position = new google.maps.LatLng(mark[1], mark[2]);
