@@ -1,6 +1,6 @@
 class ListImage {
 
-    constructor() {
+    constructor(trap) {
         this._images = [];
     }
 
@@ -8,7 +8,7 @@ class ListImage {
         this._images.push(image);
     }
 
-    clear(){
+    clear() {
         this._images = [];
     }
 
