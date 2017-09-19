@@ -34,8 +34,8 @@ class ImageController {
         this._message.text = 'Imagens carregadas com sucesso!';
       })
       .catch(err => {
-        console.log(err);
         this._message.text = 'Ocorre um erro ao carregar as imagens!';
+        console.log(err);
       });
   }
 
@@ -53,11 +53,14 @@ class ImageController {
         service
           .create(image)
           .then(data => {
-            this.listImage.add(data.payload);
+            this.listImage.add(data);
             this._message.text = 'Imagem adicionada com sucesso!';
             this.clearForm();
           })
-          .catch(err => this._message.text = 'Ocorre um erro ao adicionar a imagem!')
+          .catch(err => {
+            console.log(err)
+            this._message.text = 'Ocorre um erro ao adicionar a imagem!'
+          })
       })
       .catch(err => this._message.text = 'Ocorre um erro ao fazer o upload da imagem!');
   }
