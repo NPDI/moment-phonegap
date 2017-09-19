@@ -1,21 +1,34 @@
 class ImageService {
 
+    constructor() {
+        this._http = new HttpService();
+    }
+
     getAll() {
-        return fetch("http://192.168.20.41:3001/api/images/all", {
-            method: "GET"
-        })
-            .then(resp => resp.json())
-            .catch(err => console.log('Erro GetAll' + err));
+
+        return this._http
+            .get('http://192.168.20.41:3001/api/images/all')
+            .then(resp => {
+                return resp.payload.map(img =>
+                    new Image(img.id, img.name, img.description, img.latitude, img.longitude, img.UserId));
+            })
+            .catch(erro => {
+                console.log(erro);
+                throw new Error('Não foi possível obter as imagens do servidor.');
+            });
     }
 
     create(img) {
-        return fetch("http://192.168.20.41:3001/api/images/create", {
-            headers: { 'Content-type': 'application/json' },
-            method: "POST",
-            body: JSON.stringify(img)
-        })
-            .then(resp => resp.json())
-            .catch(err => err);
+
+        return this._http
+            .get('http://192.168.20.41:3001/api/images/create', img)
+            .then(resp => {
+                return resp.data.payload
+            })
+            .catch(erro => {
+                console.log(erro);
+                throw new Error('Não foi possível cadastrar uma nova imagem no servidor.');
+            });
 
     }
 
