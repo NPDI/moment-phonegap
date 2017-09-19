@@ -5,7 +5,6 @@ class ImageService {
     }
 
     getAll() {
-
         return this._http
             .get('http://192.168.20.41:3001/api/images/all')
             .then(resp => {
@@ -19,15 +18,14 @@ class ImageService {
     }
 
     create(img) {
-
         return this._http
-            .get('http://192.168.20.41:3001/api/images/create', img)
+            .post('http://192.168.20.41:3001/api/images/create', img)
             .then(resp => {
-                return resp.data.payload
+                return new Image(img.id, img.name, img.description, img.latitude, img.longitude, img.UserId);
             })
             .catch(erro => {
                 console.log(erro);
-                throw new Error('Não foi possível cadastrar uma nova imagem no servidor.');
+                throw new Error('Não foi possível cadastrar uma nova imagem do servidor.');
             });
 
     }
