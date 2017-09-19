@@ -36,48 +36,34 @@ function myMap() {
         const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         let service = new ImageService();
-        let markers = [];
-        let contentString = [];
 
         console.log(imageController.listImage.images)
         await service
             .getAll()
-            .then(images => {
-                console.log(images);
+            .then(images => { 
                 images.forEach(img => {
-                    contentString.push(
-                        [`
-                              <div class="info_content">
+                    const contentString =
+                        `<div class="info_content">
                               <h3>User ${img.UserId} </h3>
                               <p>Description - ${img.description} </p>
                               <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;">
-                              </div>
-                              `]
-                    );
-                    markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
+                        </div>`;
+                    const position = new google.maps.LatLng(parseFloat(img.latitude), parseFloat(img.longitude));
+                    const infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+
+                    const marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        title: img.name
+                    });
+
+                    marker.addListener('click', function () {
+                        infowindow.open(map, marker);
+                    });
                 });
             })
-
-        markers.forEach(mark => {
-            const position = new google.maps.LatLng(mark[1], mark[2]);
-
-            contentString.forEach(content => {
-                const infowindow = new google.maps.InfoWindow({
-                    content: content.toString()
-                });
-
-                const marker = new google.maps.Marker({
-                    position: position,
-                    map: map,
-                    title: mark[0]
-                });
-
-                marker.addListener('click', function () {
-                    infowindow.open(map, marker);
-                });
-            });
-
-        })
     }
 }
 
