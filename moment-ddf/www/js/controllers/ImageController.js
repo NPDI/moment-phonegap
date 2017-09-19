@@ -22,7 +22,6 @@ class ImageController {
       new MessagesView($('#messagesView')),
       'text'
     );
-
   }
 
   getAll() {
@@ -31,10 +30,13 @@ class ImageController {
 
     service.getAll()
       .then(data => {
-        data.payload.forEach(img => this.listImage.add(img))
+        data.forEach(img => this.listImage.add(img));
         this._message.text = 'Imagens carregadas com sucesso!';
       })
-      .catch(err => this._message.text = 'Ocorre um erro ao carregar as imagens!');
+      .catch(err => {
+        console.log(err);
+        this._message.text = 'Ocorre um erro ao carregar as imagens!';
+      });
   }
 
   add(event) {
@@ -44,10 +46,12 @@ class ImageController {
 
     let service = new ImageService();
 
-    service.upload(this.inputImage)
+    service
+      .upload(this.inputImage)
       .then(file => {
         let image = this._createImage(file.payload.filename);
-        service.create(image)
+        service
+          .create(image)
           .then(data => {
             this.listImage.add(data.payload);
             this._message.text = 'Imagem adicionada com sucesso!';
@@ -56,14 +60,6 @@ class ImageController {
           .catch(err => this._message.text = 'Ocorre um erro ao adicionar a imagem!')
       })
       .catch(err => this._message.text = 'Ocorre um erro ao fazer o upload da imagem!');
-
-    /* Promise.all([
-     service.upload(this.inputImage),
-     service.create()
-   ])
-     .then(data => console.log(data))
-     .catch(err => this._message.text = 'Ocorre um erro ao fazer o upload da imagem!');
- */
   }
 
   _createImage(name) {
