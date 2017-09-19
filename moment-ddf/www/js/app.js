@@ -3,6 +3,7 @@ const URL_API = 'http://192.168.20.41:3001'
 $('.modal-trigger').leanModal();
 
 function myMap() {
+
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
     function onSuccess(position = false) {
@@ -14,10 +15,7 @@ function myMap() {
              'Heading: ' + position.coords.heading + '\n' +
              'Speed: ' + position.coords.speed + '\n' +
              'Timestamp: ' + position.timestamp + '\n'); */
-
-
         createMap(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-
     };
 
     function onError(error) {
@@ -26,30 +24,35 @@ function myMap() {
     }
 
 
-    function createMap(position) {
-
-        let service = new ImageService();
+    async function createMap(position) {
+        await imageController.getAll();
 
         const mapOptions = {
             center: position,
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.HYBRID
         }
+
         const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
+        let service = new ImageService();
         let markers = [];
         let contentString = [];
 
-        service.getAll()
-            .then(data => {
-                console.log(data);
-                data.payload.forEach(img => {
+        console.log(imageController.listImage.images)
+        await service
+            .getAll()
+            .then(images => {
+                console.log(images);
+                images.forEach(img => {
                     contentString.push(
-                        [`<div class="info_content"> +
-                     <h3>User ${img.UserId} </h3> +
-                     <p>Description - ${img.description} </p> +
-                     <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;"> +
-                     </div>`]
+                        [`
+                              <div class="info_content">
+                              <h3>User ${img.UserId} </h3>
+                              <p>Description - ${img.description} </p>
+                              <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;">
+                              </div>
+                              `]
                     );
                     markers.push([img.name, parseFloat(img.latitude), parseFloat(img.longitude)]);
                 });
@@ -133,7 +136,6 @@ function getPhoto(source) {
 function onFail(message) {
     openPhoto('library');
 }
-
 
 function onFileSelected(event) {
     const selectedFile = event.target.files[0];

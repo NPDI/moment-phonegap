@@ -13,12 +13,8 @@ moment-jpp/node_modules/*
 
 # dependencies
 moment-ddf/node_modules
-
-# testing
-moment-ddf/coverage
-
-# production
-moment-ddf/build
+moment-ddf/plugins/*
+moment-ddf/platforms/*
 
 # misc
 .DS_Store
