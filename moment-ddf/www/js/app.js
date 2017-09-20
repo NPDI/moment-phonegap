@@ -19,52 +19,55 @@ function myMap() {
     };
 
     function onError(error) {
-        console.log('Not found geolocation');
+        alert('Not found geolocation');
         createMap(new google.maps.LatLng('-22.255275', '-45.702841'));
     }
+}
 
+async function createMap(position) {
+    await imageController.getAll();
 
-    async function createMap(position) {
-        await imageController.getAll();
+    const inputLatitude = document.querySelector('#latitude');
+    const inputLongitude = document.querySelector('#longitude');
 
-        const mapOptions = {
-            center: position,
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.HYBRID
-        }
+    inputLatitude.value = position.lat();
+    inputLongitude.value = position.lng();
 
-        const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-        let service = new ImageService();
-
-        console.log(imageController.listImage.images)
-        await service
-            .getAll()
-            .then(images => { 
-                images.forEach(img => {
-                    const contentString =
-                        `<div class="info_content">
-                              <h3>User ${img.UserId} </h3>
-                              <p>Description - ${img.description} </p>
-                              <img src="${URL_API}/${img.name}" style="widht:150px;height:150px;">
-                        </div>`;
-                    const position = new google.maps.LatLng(parseFloat(img.latitude), parseFloat(img.longitude));
-                    const infowindow = new google.maps.InfoWindow({
-                        content: contentString
-                    });
-
-                    const marker = new google.maps.Marker({
-                        position: position,
-                        map: map,
-                        title: img.name
-                    });
-
-                    marker.addListener('click', function () {
-                        infowindow.open(map, marker);
-                    });
-                });
-            })
+    const mapOptions = {
+        center: position,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.HYBRID
     }
+
+    const map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+    let service = new ImageService();
+    await service
+        .getAll()
+        .then(images => {
+            images.forEach(img => {
+                const contentString =
+                    `<div class="info_content">
+                          <h5>${img.description} </h5>
+                          <p>Usuario: ${img.UserId} </p>
+                          <img src="${URL_API}/${img.name}" class="responsive-img" style="widht:150px;height:180px;">
+                    </div>`;
+                const position = new google.maps.LatLng(parseFloat(img.latitude), parseFloat(img.longitude));
+                const infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                const marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    title: img.name
+                });
+
+                marker.addListener('click', function () {
+                    infowindow.open(map, marker);
+                });
+            });
+        })
 }
 
 let pictureSource;
@@ -83,7 +86,7 @@ function dataURItoBlob(dataURI) {
     const array = [];
     for (let i = 0; i < binary.length; i++)
         array.push(binary.charCodeAt(i));
-    return new Blob([new Uint8Array(array)], { type: 'image/jpg' });
+    return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
 }
 
 function onPhotoSuccess(imageURI) {
@@ -114,8 +117,14 @@ function openPhoto(source) {
 
 function getPhoto(source) {
     navigator.camera.getPicture(onPhotoSuccess, onFail, {
-        quality: 50,
-        destinationType: Camera.DestinationType.DATA_URL
+        quality: 30,
+        targetWidth: 180,
+        targetHeight: 180,
+        destinationType: Camera.DestinationType.DATA_URL,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        allowEdit: true,
+        correctOrientation: true
     });
 }
 
