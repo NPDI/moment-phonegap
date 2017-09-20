@@ -12,7 +12,6 @@ class ImageService {
                     new Image(img.id, img.name, img.description, img.latitude, img.longitude, img.UserId));
             })
             .catch(erro => {
-                console.log(erro);
                 throw new Error('Não foi possível obter as imagens do servidor.');
             });
     }
@@ -24,7 +23,6 @@ class ImageService {
                 return new Image(img.id, img.name, img.description, img.latitude, img.longitude, img.UserId);
             })
             .catch(erro => {
-                console.log(erro);
                 throw new Error('Não foi possível cadastrar uma nova imagem do servidor.');
             });
 

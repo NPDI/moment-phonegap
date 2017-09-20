@@ -15,7 +15,6 @@ class HttpService {
         })
             .then(res => this._handleErrors(res))
             .then(res => res.json());
-
     }
 
     _handleErrors(res) {
